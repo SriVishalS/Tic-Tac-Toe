@@ -22,12 +22,13 @@ body {
   justify-items: center;
   align-items: center;
   grid-template-columns: repeat(3, auto);
+  background-color: green;
 }
 
 .cell {
   width: var(--cell-size);
   height: var(--cell-size);
-  border: 1px solid black;
+  border: 1px solid rgb(0, 204, 255);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -63,13 +64,13 @@ body {
 .cell.x::before,
 .cell.x::after,
 .cell.circle::before {
-  background-color: black;
+  background-color: wheat;
 }
 
 .board.x .cell:not(.x):not(.circle):hover::before,
 .board.x .cell:not(.x):not(.circle):hover::after,
 .board.circle .cell:not(.x):not(.circle):hover::before {
-  background-color: lightgrey;
+  background-color: black;
 }
 
 .cell.x::before,
@@ -111,7 +112,7 @@ body {
 .board.circle .cell:not(.x):not(.circle):hover::after {
   width: calc(var(--mark-size) * 0.7);
   height: calc(var(--mark-size) * 0.7);
-  background-color: white;
+  background-color: green;
 }
 
 .winning-message {
