@@ -1,89 +1,108 @@
-const X_CLASS = 'x'
-const CIRCLE_CLASS = 'circle'
-const WINNING_COMBINATIONS = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6]
-]
-const cellElements = document.querySelectorAll('[data-cell]')
-const board = document.getElementById('board')
-const winningMessageElement = document.getElementById('winningMessage')
-const restartButton = document.getElementById('restartButton')
-const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
-let circleTurn
+let btnRef = document.querySelectorAll(".button-option");
+let popupRef = document.querySelector(".popup");
+let newgameBtn = document.getElementById("new-game");
+let restartBtn = document.getElementById("restart");
+let msgRef = document.getElementById("message");
+//Winning Pattern Array
+let winningPattern = [
+  [0, 1, 2],
+  [0, 3, 6],
+  [2, 5, 8],
+  [6, 7, 8],
+  [3, 4, 5],
+  [1, 4, 7],
+  [0, 4, 8],
+  [2, 4, 6],
+];
+//Player 'X' plays first
+let xTurn = true;
+let count = 0;
 
-startGame()
+//Disable All Buttons
+const disableButtons = () => {
+  btnRef.forEach((element) => (element.disabled = true));
+  //enable popup
+  popupRef.classList.remove("hide");
+};
 
-restartButton.addEventListener('click', startGame)
+//Enable all buttons (For New Game and Restart)
+const enableButtons = () => {
+  btnRef.forEach((element) => {
+    element.innerText = "";
+    element.disabled = false;
+  });
+  //disable popup
+  popupRef.classList.add("hide");
+};
 
-function startGame() {
-      circleTurn = false
-      cellElements.forEach(cell => {
-            cell.classList.remove(X_CLASS)
-            cell.classList.remove(CIRCLE_CLASS)
-            cell.removeEventListener('click', handleClick)
-            cell.addEventListener('click', handleClick, { once: true })
-      })
-      setBoardHoverClass()
-      winningMessageElement.classList.remove('show')
-}
+//This function is executed when a player wins
+const winFunction = (letter) => {
+  disableButtons();
+  if (letter == "X") {
+    msgRef.innerHTML = "&#x1F389; <br> 'X' Wins";
+  } else {
+    msgRef.innerHTML = "&#x1F389; <br> 'O' Wins";
+  }
+};
 
-function handleClick(e) {
-      const cell = e.target
-      const currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS
-      placeMark(cell, currentClass)
-      if (checkWin(currentClass)) {
-            endGame(false)
-      } else if (isDraw()) {
-            endGame(true)
-      } else {
-            swapTurns()
-            setBoardHoverClass()
+//Function for draw
+const drawFunction = () => {
+  disableButtons();
+  msgRef.innerHTML = "&#x1F60E; <br> It's a Draw";
+};
+
+//New Game
+newgameBtn.addEventListener("click", () => {
+  count = 0;
+  enableButtons();
+});
+restartBtn.addEventListener("click", () => {
+  count = 0;
+  enableButtons();
+});
+
+//Win Logic
+const winChecker = () => {
+  //Loop through all win patterns
+  for (let i of winningPattern) {
+    let [element1, element2, element3] = [
+      btnRef[i[0]].innerText,
+      btnRef[i[1]].innerText,
+      btnRef[i[2]].innerText,
+    ];
+    //Check if elements are filled
+    //If 3 empty elements are same and would give win as would
+    if (element1 != "" && (element2 != "") & (element3 != "")) {
+      if (element1 == element2 && element2 == element3) {
+        //If all 3 buttons have same values then pass the value to winFunction
+        winFunction(element1);
       }
-}
+    }
+  }
+};
 
-function endGame(draw) {
-      if (draw) {
-            winningMessageTextElement.innerText = 'Draw!'
-      } else {
-            winningMessageTextElement.innerText = `${circleTurn ? "O" : "X"} Wins!`
-      }
-      winningMessageElement.classList.add('show')
-}
-
-function isDraw() {
-      return [...cellElements].every(cell => {
-            return cell.classList.contains(X_CLASS) || cell.classList.contains(CIRCLE_CLASS)
-      })
-}
-
-function placeMark(cell, currentClass) {
-      cell.classList.add(currentClass)
-}
-
-function swapTurns() {
-      circleTurn = !circleTurn
-}
-
-function setBoardHoverClass() {
-      board.classList.remove(X_CLASS)
-      board.classList.remove(CIRCLE_CLASS)
-      if (circleTurn) {
-            board.classList.add(CIRCLE_CLASS)
-      } else {
-            board.classList.add(X_CLASS)
-      }
-}
-
-function checkWin(currentClass) {
-      return WINNING_COMBINATIONS.some(combination => {
-            return combination.every(index => {
-                  return cellElements[index].classList.contains(currentClass)
-            })
-      })
-}
+//Display X/O on click
+btnRef.forEach((element) => {
+  element.addEventListener("click", () => {
+    if (xTurn) {
+      xTurn = false;
+      //Display X
+      element.innerText = "X";
+      element.disabled = true;
+    } else {
+      xTurn = true;
+      //Display Y
+      element.innerText = "O";
+      element.disabled = true;
+    }
+    //Increment count on each click
+    count += 1;
+    if (count == 9) {
+      drawFunction();
+    }
+    //Check for win on every click
+    winChecker();
+  });
+});
+//Enable Buttons and disable popup on page load
+window.onload = enableButtons;

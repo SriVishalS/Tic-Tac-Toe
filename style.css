@@ -1,149 +1,76 @@
-*,
-*::after,
-*::before {
-  box-sizing: border-box;
-}
-
-:root {
-  --cell-size: 100px;
-  --mark-size: calc(var(--cell-size) * 0.9);
-}
-
-body {
+* {
+  padding: 0;
   margin: 0;
+  box-sizing: border-box;
+  font-family: "Raleway", sans-serif;
 }
-
-.board {
-  width: 100vw;
+body {
   height: 100vh;
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  justify-items: center;
-  align-items: center;
-  grid-template-columns: repeat(3, auto);
-  background-color: green;
+  background: linear-gradient(135deg, #8052ec, #d161ff);
 }
-
-.cell {
-  width: var(--cell-size);
-  height: var(--cell-size);
-  border: 1px solid rgb(0, 204, 255);
+html {
+  font-size: 16px;
+}
+.wrapper {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+.container {
+  width: 70vmin;
+  height: 70vmin;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 2vmin;
+}
+.button-option {
+  background: #ffffff;
+  height: 22vmin;
+  width: 22vmin;
+  border: none;
+  border-radius: 8px;
+  font-size: 12vmin;
+  color: #d161ff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+#restart {
+  font-size: 1.3em;
+  padding: 1em;
+  border-radius: 8px;
+  background-color: #0a0027;
+  color: #ffffff;
+  border: none;
   position: relative;
-  cursor: pointer;
+  margin: 1.5em auto 0 auto;
+  display: block;
 }
-
-.cell:first-child,
-.cell:nth-child(2),
-.cell:nth-child(3) {
-  border-top: none;
-}
-
-.cell:nth-child(3n + 1) {
-  border-left: none;
-}
-
-.cell:nth-child(3n + 3) {
-  border-right: none;
-}
-
-.cell:last-child,
-.cell:nth-child(8),
-.cell:nth-child(7) {
-  border-bottom: none;
-}
-
-.cell.x,
-.cell.circle {
-  cursor: not-allowed;
-}
-
-.cell.x::before,
-.cell.x::after,
-.cell.circle::before {
-  background-color: wheat;
-}
-
-.board.x .cell:not(.x):not(.circle):hover::before,
-.board.x .cell:not(.x):not(.circle):hover::after,
-.board.circle .cell:not(.x):not(.circle):hover::before {
-  background-color: black;
-}
-
-.cell.x::before,
-.cell.x::after,
-.board.x .cell:not(.x):not(.circle):hover::before,
-.board.x .cell:not(.x):not(.circle):hover::after {
-  content: "";
+.popup {
+  background: linear-gradient(135deg, #8052ec, #d161ff);
+  height: 100%;
+  width: 100%;
   position: absolute;
-  width: calc(var(--mark-size) * 0.15);
-  height: var(--mark-size);
-}
-
-.cell.x::before,
-.board.x .cell:not(.x):not(.circle):hover::before {
-  transform: rotate(45deg);
-}
-
-.cell.x::after,
-.board.x .cell:not(.x):not(.circle):hover::after {
-  transform: rotate(-45deg);
-}
-
-.cell.circle::before,
-.cell.circle::after,
-.board.circle .cell:not(.x):not(.circle):hover::before,
-.board.circle .cell:not(.x):not(.circle):hover::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-}
-
-.cell.circle::before,
-.board.circle .cell:not(.x):not(.circle):hover::before {
-  width: var(--mark-size);
-  height: var(--mark-size);
-}
-
-.cell.circle::after,
-.board.circle .cell:not(.x):not(.circle):hover::after {
-  width: calc(var(--mark-size) * 0.7);
-  height: calc(var(--mark-size) * 0.7);
-  background-color: green;
-}
-
-.winning-message {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.9);
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 5rem;
-  flex-direction: column;
-}
-
-.winning-message button {
-  font-size: 3rem;
-  background-color: white;
-  border: 1px solid black;
-  padding: 0.25em 0.5em;
-  cursor: pointer;
-}
-
-.winning-message button:hover {
-  background-color: black;
-  color: white;
-  border-color: white;
-}
-
-.winning-message.show {
   display: flex;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1em;
+  font-size: 12vmin;
+}
+#new-game {
+  font-size: 0.6em;
+  padding: 0.5em 1em;
+  background-color: #0a0027;
+  color: #ffffff;
+  border-radius: 0.2em;
+  border: none;
+}
+#message {
+  color: #ffffff;
+  text-align: center;
+  font-size: 1em;
+}
+.popup.hide {
+  display: none;
 }
